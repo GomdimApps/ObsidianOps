@@ -127,10 +127,7 @@ build-package: build-binary
 	sed -i "s/AppTemplate/$(PACKAGE_NAME)/; s/x.y.z/$(VERSION_APP)/; s/Dev/$(MAINTAINER)/; s/arc/$(ARCHITECTURE)/; s/DescriptionApp/$(DESCRIPTION)/" /tmp/Build/$(PACKAGE_NAME)/DEBIAN/control
 	chmod +x /tmp/Build/$(PACKAGE_NAME)/usr/bin/* /tmp/Build/$(PACKAGE_NAME)/DEBIAN/postinst
 	chmod 711 /tmp/Build/$(PACKAGE_NAME)/var/log/* /tmp/Build/$(PACKAGE_NAME)/etc/$(PACKAGE_NAME)/*
-	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/$(PACKAGE_NAME)_$(VERSION_APP)_$(ARCHITECTURE).deb
-	cd /tmp/Build/APPS/ && alien --to-rpm --target=x86_64 $(PACKAGE_NAME)_$(VERSION_APP)_$(ARCHITECTURE).deb
-	cp -r /tmp/Build/APPS/* /tmp/build_$(PACKAGE_NAME)/
-	rm -r /tmp/Build/
+	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/$(PACKAGE_NAME).deb
 	clear
 	echo "Pacote DEBIAN criado com sucesso!"
 
