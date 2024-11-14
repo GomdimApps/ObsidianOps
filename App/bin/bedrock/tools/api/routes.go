@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/GomdimApps/MineServerTools/App/bin/api/utils"
+	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/api/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
 )
@@ -22,11 +22,13 @@ var (
 
 func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token_custom, err := utils.GetTokenApi()
+		config, err := utils.LoadConfig()
+		token_custom := config.TokenApi
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
 		}
+
 		token := c.GetHeader("Authorization")
 		expectedToken := fmt.Sprintf("Bearer %s", token_custom)
 		if token != expectedToken {

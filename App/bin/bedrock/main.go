@@ -5,12 +5,28 @@ import (
 	"log"
 	"os"
 
+	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/api"
+	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/api/utils"
 	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/backup"
 	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/network"
 	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/system"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+
+	r := gin.Default()
+	config, err := utils.LoadConfig()
+	apiPort := config.ApiPort
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	api.SetupRoutes(r)
+
+	r.Run(fmt.Sprintf(":%d", apiPort))
+
 	if len(os.Args) < 3 {
 		fmt.Println("Erro: Argumentos insuficientes.")
 		fmt.Println("Uso: go run main.go [--backup|--schedule|--view]")
@@ -96,4 +112,5 @@ func main() {
 		fmt.Println("Use --help para mais informações.")
 		os.Exit(1)
 	}
+
 }

@@ -3,6 +3,7 @@ module github.com/GomdimApps/MineServerTools
 go 1.22.5
 
 require (
+	github.com/GomdimApps/lcme v1.1.6
 	github.com/PuerkitoBio/goquery v1.9.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
@@ -11,7 +12,6 @@ require (
 
 require (
 	github.com/kr/pretty v0.1.0 // indirect
-	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
 
@@ -21,7 +21,6 @@ require (
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
-	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
@@ -48,7 +47,7 @@ require (
 	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
-	golang.org/x/time v0.6.0 // indirect
+	golang.org/x/time v0.6.0
 	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
