@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-groupadd -f minetools
+groupadd -f obeops
 # Permissões das pasta de Backups
-chgrp -R minetools /var/mine-backups/backup-server-bedrock/ /var/mine-backups/backup-server-java/
+chgrp -R obeops /var/mine-backups/backup-server-bedrock/ /var/mine-backups/backup-server-java/
 
-chgrp minetools /var/log/bedrock-backup.log /var/log/bedrock-update.log /var/log/java-server.log /var/log/bedrock-console.log
-chgrp minetools /etc/mineservertools/bedrock-server.conf /etc/mineservertools/java-edition-server.conf /etc/mineservertools/mtools.conf
+chgrp obeops /var/log/bedrock-backup.log /var/log/bedrock-update.log /var/log/java-server.log /var/log/bedrock-console.log
+chgrp obeops /etc/mineservertools/bedrock-server.conf /etc/mineservertools/java-edition-server.conf /etc/mineservertools/mtools.conf
 chmod 771 /var/log/bedrock-backup.log /var/log/bedrock-update.log /etc/mineservertools/bedrock-server.conf /etc/mineservertools/java-edition-server.conf /etc/mineservertools/mtools.conf
 chmod 711 /usr/bin/mtools /usr/bin/bed-tools /usr/bin/console-bedrock /usr/bin/mtools-api
 

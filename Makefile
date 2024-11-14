@@ -1,23 +1,10 @@
-PACKAGE_NAME := MineServerTools
-SHELL := /bin/bash
+PACKAGE_NAME := obeops
+DESCRIPTION := Ferramentas para manter servidor Minecraft estável e ativo.
+MAINTAINER := Dev Isac Gondim
+ARCHITECTURE := all
 
-.PHONY: package-deb
-package-deb:
-	mkdir -p dist
-	mkdir -p /tmp/deb-mineservertools/usr/bin/ /tmp/deb-mineservertools/usr/lib/systemd/system /tmp/deb-mineservertools/DEBIAN
-	mkdir -p /tmp/deb-mineservertools/etc/mineservertools /tmp/deb-mineservertools/var/log /tmp/deb-mineservertools/var/mine-backups
-	cp App/debug/debian/debian.control /tmp/deb-mineservertools/DEBIAN/control
-	cp App/debug/debian/install.sh /tmp/deb-mineservertools/DEBIAN/postinst
-	cp App/bin/bedrock/systemd/* /tmp/deb-mineservertools/usr/lib/systemd/system/
-	cp App/bin/bedrock/shell/* /tmp/deb-mineservertools/usr/bin/
-	cp App/bin/bedrock/logs/* /tmp/deb-mineservertools/var/log/
-	cp App/bin/bedrock/confs/* /tmp/deb-mineservertools/etc/mineservertools/
-	go build -o /tmp/deb-mineservertools/usr/bin/bed-tools App/bin/bedrock/*.go
-	go build -o /tmp/deb-mineservertools/usr/bin/mtools-api App/bin/api/*.go
-	sed -i "s/x.y.z/$(CURRENT_VERSION_MICRO)/" /tmp/deb-mineservertools/DEBIAN/control
-	dpkg-deb --build /tmp/deb-mineservertools/ dist/$(PACKAGE_NAME)_$(CURRENT_VERSION_MICRO)_all.deb
-	[ -d "/tmp/deb-mineservertools/" ] && rm -rf "/tmp/deb-mineservertools/"
-	clear ; echo "Pacote DEBIAN criado com sucessso!"
+
+SHELL := /bin/bash
 
 ## Gerenciamento de versões
 
@@ -104,3 +91,53 @@ tag-message:
 .PHONY: commit-message
 commit-message:
 	@echo "$(COMMIT_MESSAGE)"
+
+VERSION_APP := $(CURRENT_VERSION_MICRO)
+
+# --- Compile ---
+## THIS SCRIPT IS RESPONSIBLE FOR COMPILING THE APPLICATION BINARY ##
+.PHONY: build-binary
+build-binary:
+	mkdir -p /tmp/Build/APPS/ /tmp/Build/bin/$(PACKAGE_NAME)/
+	export GOOS=linux GOARCH=amd64
+	cp App/shell/* /tmp/Build/bin/$(PACKAGE_NAME)/
+	go build -o /tmp/Build/bin/$(PACKAGE_NAME)/$(PACKAGE_NAME) App/bin/bedrock/*.go
+
+## THIS SCRIPT IS RESPONSIBLE FOR COMPILING THE APPLICATION
+## IT SEPARATES ALL THE FILES INTO THEIR NECESSARY STRUCTURES AND COMPILES THE PACKAGE
+.PHONY: build-package
+build-package: build-binary
+	clear
+	echo "Iniciando o processo de compilação"
+	mkdir -p /tmp/Build/$(PACKAGE_NAME)/usr/bin/ \
+			 /tmp/Build/$(PACKAGE_NAME)/usr/lib/systemd/system \
+			 /tmp/Build/$(PACKAGE_NAME)/DEBIAN/ \
+			 /tmp/Build/APPS/ \
+			 dist/ \
+			 /tmp/Build/$(PACKAGE_NAME)/etc/$(PACKAGE_NAME) \
+			 /tmp/Build/$(PACKAGE_NAME)/var/log/$(PACKAGE_NAME)/ \
+			 /tmp/Build/$(PACKAGE_NAME)/var/ \
+			 /tmp/build_$(PACKAGE_NAME)/
+	mv /tmp/Build/bin/$(PACKAGE_NAME)/* /tmp/Build/$(PACKAGE_NAME)/usr/bin/
+	cp App/dystro/debian/debian.control /tmp/Build/$(PACKAGE_NAME)/DEBIAN/control
+	cp App/dystro/debian/install.sh /tmp/Build/$(PACKAGE_NAME)/DEBIAN/postinst
+	cp App/systemd/* /tmp/Build/$(PACKAGE_NAME)/usr/lib/systemd/system/
+	cp App/logs/* /tmp/Build/$(PACKAGE_NAME)/var/log/$(PACKAGE_NAME)/
+	cp App/confs/* /tmp/Build/$(PACKAGE_NAME)/etc/$(PACKAGE_NAME)/
+	sed -i "s/AppTemplate/$(PACKAGE_NAME)/; s/x.y.z/$(VERSION_APP)/; s/Dev/$(MAINTAINER)/; s/arc/$(ARCHITECTURE)/; s/DescriptionApp/$(DESCRIPTION)/" /tmp/Build/$(PACKAGE_NAME)/DEBIAN/control
+	chmod +x /tmp/Build/$(PACKAGE_NAME)/usr/bin/* /tmp/Build/$(PACKAGE_NAME)/DEBIAN/postinst
+	chmod 711 /tmp/Build/$(PACKAGE_NAME)/var/log/* /tmp/Build/$(PACKAGE_NAME)/etc/$(PACKAGE_NAME)/*
+	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/$(PACKAGE_NAME)_$(VERSION_APP)_$(ARCHITECTURE).deb
+	cd /tmp/Build/APPS/ && alien --to-rpm --target=x86_64 $(PACKAGE_NAME)_$(VERSION_APP)_$(ARCHITECTURE).deb
+	cp -r /tmp/Build/APPS/* /tmp/build_$(PACKAGE_NAME)/
+	rm -r /tmp/Build/
+	clear
+	echo "Pacote DEBIAN criado com sucesso!"
+
+.PHONY: build-app
+build-app:
+	rm -rf /tmp/build_$(PACKAGE_NAME)/*
+	mkdir -p /tmp/build_$(PACKAGE_NAME)/
+	sudo docker build --no-cache -t app-build .
+	sudo docker run --rm -e TERM=xterm-256color -v /tmp/build_$(PACKAGE_NAME)/:/tmp/build_$(PACKAGE_NAME)/ app-build
+	sudo docker rmi app-build

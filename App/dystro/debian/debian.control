@@ -1,0 +1,6 @@
+Package: AppTemplate
+Version: x.y.z
+Maintainer: Dev 
+Architecture: arc
+Description: DescriptionApp
+Depends: tar, wget, rsync, tmux, unzip, lsof, dialog
