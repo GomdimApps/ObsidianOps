@@ -107,7 +107,6 @@ build-binary:
 ## IT SEPARATES ALL THE FILES INTO THEIR NECESSARY STRUCTURES AND COMPILES THE PACKAGE
 .PHONY: build-package
 build-package: build-binary
-	clear
 	echo "Iniciando o processo de compilação"
 	mkdir -p /tmp/Build/$(PACKAGE_NAME)/usr/bin/ \
 			 /tmp/Build/$(PACKAGE_NAME)/usr/lib/systemd/system \
@@ -127,8 +126,7 @@ build-package: build-binary
 	sed -i "s/AppTemplate/$(PACKAGE_NAME)/; s/x.y.z/$(VERSION_APP)/; s/Dev/$(MAINTAINER)/; s/arc/$(ARCHITECTURE)/; s/DescriptionApp/$(DESCRIPTION)/" /tmp/Build/$(PACKAGE_NAME)/DEBIAN/control
 	chmod +x /tmp/Build/$(PACKAGE_NAME)/usr/bin/* /tmp/Build/$(PACKAGE_NAME)/DEBIAN/postinst
 	chmod 711 /tmp/Build/$(PACKAGE_NAME)/var/log/* /tmp/Build/$(PACKAGE_NAME)/etc/$(PACKAGE_NAME)/*
-	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/$(PACKAGE_NAME).deb
-	clear
+	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/obeops.deb
 	echo "Pacote DEBIAN criado com sucesso!"
 
 .PHONY: build-app
@@ -136,5 +134,5 @@ build-app:
 	rm -rf /tmp/build_$(PACKAGE_NAME)/*
 	mkdir -p /tmp/build_$(PACKAGE_NAME)/
 	sudo docker build --no-cache -t app-build .
-	sudo docker run --rm -e TERM=xterm-256color -v /tmp/build_$(PACKAGE_NAME)/:/tmp/build_$(PACKAGE_NAME)/ app-build
+	sudo docker run --rm -e TERM=xterm-256color app-build
 	sudo docker rmi app-build

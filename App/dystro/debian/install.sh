@@ -5,8 +5,8 @@ groupadd -f obeops
 chgrp -R obeops /var/mine-backups/backup-server-bedrock/ /var/mine-backups/backup-server-java/
 
 chgrp obeops /var/log/bedrock-backup.log /var/log/bedrock-update.log /var/log/java-server.log /var/log/bedrock-console.log
-chgrp obeops /etc/mineservertools/bedrock-server.conf /etc/mineservertools/java-edition-server.conf /etc/mineservertools/mtools.conf
-chmod 771 /var/log/bedrock-backup.log /var/log/bedrock-update.log /etc/mineservertools/bedrock-server.conf /etc/mineservertools/java-edition-server.conf /etc/mineservertools/mtools.conf
+chgrp obeops /etc/obeops/bedrock-server.conf /etc/obeops/java-edition-server.conf /etc/obeops/mtools.conf
+chmod 771 /var/log/bedrock-backup.log /var/log/bedrock-update.log /etc/obeops/bedrock-server.conf /etc/obeops/java-edition-server.conf /etc/obeops/mtools.conf
 chmod 711 /usr/bin/mtools /usr/bin/bed-tools /usr/bin/console-bedrock /usr/bin/mtools-api
 
 dependencies=(tar wget rsync tmux unzip lsof)
@@ -32,7 +32,7 @@ add_paths_to_bashrc() {
     local path_entry_java="export PATH=\$PATH:/usr/bin/java-tools"
 
     if ! grep -q "$path_entry_bedrock" "$bashrc_path"; then
-        echo -e "\n# PATH do MineServerTools" >> "$bashrc_path"
+        echo -e "\n# PATH do obeops" >> "$bashrc_path"
         echo "$path_entry_bedrock" >> "$bashrc_path"
     fi
 
@@ -51,6 +51,6 @@ add_paths_to_bashrc "/root"
 check_and_install
 echo "Configuração finalizada."
 clear
-echo "Instalação do Mineservertools finalizada"
+echo "Instalação do obeops finalizada"
 
 exit 0

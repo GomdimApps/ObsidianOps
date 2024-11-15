@@ -1,4 +1,4 @@
-module github.com/GomdimApps/MineServerTools
+module github.com/GomdimApps/ObsidianOps
 
 go 1.22.5
 

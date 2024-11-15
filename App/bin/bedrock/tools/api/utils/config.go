@@ -6,7 +6,7 @@ import (
 	"github.com/GomdimApps/lcme"
 )
 
-const configPath = "/etc/mineservertools/mtools.conf"
+const configPath = "/etc/obeops/mtools.conf"
 
 type Config struct {
 	ApiPort  int

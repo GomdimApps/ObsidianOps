@@ -5,11 +5,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/api"
-	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/api/utils"
-	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/backup"
-	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/network"
-	"github.com/GomdimApps/MineServerTools/App/bin/bedrock/tools/system"
+	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/api"
+	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/api/utils"
+	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/backup"
+	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/network"
+	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/system"
 	"github.com/gin-gonic/gin"
 )
 

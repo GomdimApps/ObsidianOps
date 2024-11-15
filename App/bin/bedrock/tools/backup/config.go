@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-const ConfigFilePath = "/etc/mineservertools/bedrock-server.conf"
+const ConfigFilePath = "/etc/obeops/bedrock-server.conf"
 
 func GetServerDir() string {
 	content, err := ioutil.ReadFile(ConfigFilePath)

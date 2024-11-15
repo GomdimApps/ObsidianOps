@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const ConfigFilePath = "/etc/mineservertools/bedrock-server.conf"
+const ConfigFilePath = "/etc/obeops/bedrock-server.conf"
 
 func SaveFile(filename string, content []byte, destDir string) error {
 	updateDir := filepath.Join(destDir, "bedrock-update")
