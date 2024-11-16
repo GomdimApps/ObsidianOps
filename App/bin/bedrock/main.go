@@ -8,6 +8,7 @@ import (
 	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/api"
 	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/api/utils"
 	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/backup"
+	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/console"
 	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/network"
 	"github.com/GomdimApps/ObsidianOps/App/bin/bedrock/tools/system"
 	"github.com/gin-gonic/gin"
@@ -105,6 +106,43 @@ func main() {
 		default:
 			fmt.Println("Erro: Opção inválida para --services.")
 			fmt.Println("Uso: obeops --services -api-start")
+			fmt.Println("Use --help para mais informações.")
+			os.Exit(1)
+		}
+	case "--console":
+		switch os.Args[2] {
+		case "--start":
+			dir := ""
+			if len(os.Args) > 3 {
+				dir = os.Args[3]
+			}
+			if err := console.StartSession(dir); err != nil {
+				fmt.Printf("Erro: %v\n", err)
+				os.Exit(1)
+			}
+		case "--stop":
+			if err := console.StopSession(); err != nil {
+				fmt.Printf("Erro: %v\n", err)
+				os.Exit(1)
+			}
+		case "-connect":
+			if err := console.ConnectSession(); err != nil {
+				fmt.Printf("Erro: %v\n", err)
+				os.Exit(1)
+			}
+		case "--send":
+			if len(os.Args) < 4 {
+				fmt.Println("Erro: O comando deve ser especificado.")
+				os.Exit(1)
+			}
+			command := os.Args[3]
+			if err := console.SendCommand(command); err != nil {
+				fmt.Printf("Erro: %v\n", err)
+				os.Exit(1)
+			}
+		default:
+			fmt.Println("Erro: Opção inválida para --console.")
+			fmt.Println("Uso: obeops --console [--start|--stop|--connect|--send <command>]")
 			fmt.Println("Use --help para mais informações.")
 			os.Exit(1)
 		}

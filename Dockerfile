@@ -12,12 +12,12 @@ FROM debian:11-slim
 
 EXPOSE 2308
 
-COPY --from=builder /tmp/Build/APPS/obeops.deb /app/obeops.deb
+COPY --from=builder /tmp/Build/APPS/obeops.deb /app/obeops_app.deb
 
 RUN apt-get update && \
     apt-get install -y sudo && \
     sudo apt-get install -y dialog && \
     sudo apt-get install -y tar wget rsync tmux unzip lsof dialog && \
-    sudo dpkg -i /app/obeops.deb
+    sudo dpkg -i /app/obeops_app.deb
 
 CMD ["/usr/bin/obeops", "--services", "-api-start"]

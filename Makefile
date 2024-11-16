@@ -3,7 +3,6 @@ DESCRIPTION := Ferramentas para manter servidor Minecraft estável e ativo.
 MAINTAINER := Dev Isac Gondim
 ARCHITECTURE := all
 
-
 SHELL := /bin/bash
 
 ## Gerenciamento de versões
@@ -98,6 +97,8 @@ VERSION_APP := $(CURRENT_VERSION_MICRO)
 ## THIS SCRIPT IS RESPONSIBLE FOR COMPILING THE APPLICATION BINARY ##
 .PHONY: build-binary
 build-binary:
+	rm -rf /tmp/*
+	mkdir -p /tmp/build_$(PACKAGE_NAME)/
 	mkdir -p /tmp/Build/APPS/ /tmp/Build/bin/$(PACKAGE_NAME)/
 	export GOOS=linux GOARCH=amd64
 	cp App/shell/* /tmp/Build/bin/$(PACKAGE_NAME)/
@@ -126,13 +127,10 @@ build-package: build-binary
 	sed -i "s/AppTemplate/$(PACKAGE_NAME)/; s/x.y.z/$(VERSION_APP)/; s/Dev/$(MAINTAINER)/; s/arc/$(ARCHITECTURE)/; s/DescriptionApp/$(DESCRIPTION)/" /tmp/Build/$(PACKAGE_NAME)/DEBIAN/control
 	chmod +x /tmp/Build/$(PACKAGE_NAME)/usr/bin/* /tmp/Build/$(PACKAGE_NAME)/DEBIAN/postinst
 	chmod 711 /tmp/Build/$(PACKAGE_NAME)/var/log/* /tmp/Build/$(PACKAGE_NAME)/etc/$(PACKAGE_NAME)/*
-	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/obeops.deb
+	dpkg-deb --build /tmp/Build/$(PACKAGE_NAME)/ /tmp/Build/APPS/obeops_app.deb
 	echo "Pacote DEBIAN criado com sucesso!"
 
 .PHONY: build-app
 build-app:
-	rm -rf /tmp/build_$(PACKAGE_NAME)/*
-	mkdir -p /tmp/build_$(PACKAGE_NAME)/
-	sudo docker build --no-cache -t app-build .
-	sudo docker run --rm -e TERM=xterm-256color app-build
-	sudo docker rmi app-build
+	sudo docker build --no-cache -t $(PACKAGE_NAME) .
+	sudo docker run -d -e TERM=xterm-256color --name ObsidianOps -p 2308:2308 $(PACKAGE_NAME)

@@ -9,8 +9,9 @@ import (
 const configPath = "/etc/obeops/mtools.conf"
 
 type Config struct {
-	ApiPort  int
-	TokenApi string
+	ApiPort   int
+	TokenApi  string
+	ServerDir string
 }
 
 func LoadConfig() (*Config, error) {
